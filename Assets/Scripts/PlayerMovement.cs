@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement")]
-    public float moveSpeed;
+    //movement code
+    private float moveSpeed;
+    public float walkSpeed;
+    public float sprintSpeed;
     public float groundDrag;
+    //jumping code
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
-    [Header("Keybinds")]
+    //keybinds
     public KeyCode jumpKey = KeyCode.Space;
-    [Header("Ground Check")]
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    //ground check code
     public float playerHeight;
     public LayerMask whatIsGround;
     bool grounded;
@@ -22,6 +26,13 @@ public class PlayerMovement : MonoBehaviour
     float verticalInput;
     Vector3 moveDirection;
     Rigidbody rb;
+    public MovementState state;
+    public enum MovementState
+    {
+        walking,
+        sprinting,
+        air
+    }
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -34,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         MyInput();
         SpeedControl();
+        StateHandler();
         if (grounded)
             rb.linearDamping = groundDrag;
         else
@@ -53,6 +65,26 @@ public class PlayerMovement : MonoBehaviour
             readyToJump = false;
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
+        }
+    }
+    private void StateHandler()
+    {
+        //mode sprinting
+        if(grounded && Input.GetKey(sprintKey))
+        {
+            state = MovementState.sprinting;
+            moveSpeed = sprintSpeed;
+        }
+        //mode walking
+        else if(grounded)
+        {
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
+        }
+        //if dont have either
+        else
+        {
+            state = MovementState.air;
         }
     }
     //movement direction
