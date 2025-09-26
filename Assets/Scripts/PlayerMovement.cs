@@ -14,9 +14,14 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
+    //crouch code
+    public float crouchSpeed;
+    public float crouchYScale;
+    private float startYScale;
     //keybinds
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode crouchKey = KeyCode.LeftControl;
     //ground check code
     public float playerHeight;
     public LayerMask whatIsGround;
@@ -31,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     {
         walking,
         sprinting,
+        crouching,
         air
     }
     private void Start()
@@ -38,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
+        startYScale = transform.localScale.y;
     }
     private void Update()
     {
@@ -66,9 +73,27 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+        //for crouching
+        if(Input.GetKeyDown(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        }
+        //stopping crouching
+        if (Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+
+        }
     }
     private void StateHandler()
     {
+        //mode crouching
+        if(Input.GetKey(crouchKey))
+        {
+            state = MovementState.crouching;
+            moveSpeed = crouchSpeed;
+        }
         //mode sprinting
         if(grounded && Input.GetKey(sprintKey))
         {
