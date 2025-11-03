@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public InputActionReference jump;
     public InputActionReference sprint;
     public InputActionReference crouch;
-    private Vector3 _moveDirection;
+    private Vector2 _moveDirection;
     //movement code
     private float moveSpeed;
     public float walkSpeed;
@@ -62,9 +62,9 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         if (move != null && move.action != null)
-            _moveDirection = move.action.ReadValue<Vector3>();
+            _moveDirection = move.action.ReadValue<Vector2>();
         else
-            _moveDirection = Vector3.zero;
+            _moveDirection = Vector2.zero;
 
         //checks if player is grounded, then handles it accordingly
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
