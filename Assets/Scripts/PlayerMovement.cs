@@ -1,9 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public InputActionReference move;
+    public InputActionReference fire;
+    public InputActionReference jump;
+    public InputActionReference sprint;
+    public InputActionReference crouch;
+    private Vector3 _moveDirection;
     //movement code
     private float moveSpeed;
     public float walkSpeed;
@@ -18,10 +25,6 @@ public class PlayerMovement : MonoBehaviour
     public float crouchSpeed;
     public float crouchYScale;
     private float startYScale;
-    //keybinds
-    public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
-    public KeyCode crouchKey = KeyCode.LeftControl;
     //ground check code
     public float playerHeight;
     public LayerMask whatIsGround;
@@ -44,6 +47,11 @@ public class PlayerMovement : MonoBehaviour
         crouching,
         air
     }
+
+    // input state
+    private bool isSprinting;
+    private bool isCrouching;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -53,6 +61,11 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
+        if (move != null && move.action != null)
+            _moveDirection = move.action.ReadValue<Vector3>();
+        else
+            _moveDirection = Vector3.zero;
+
         //checks if player is grounded, then handles it accordingly
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         MyInput();
@@ -71,47 +84,25 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        //for jumping, adds a cooldown and checks if grounded
-        if(Input.GetKey(jumpKey) && readyToJump && grounded)
-        {
-            readyToJump = false;
-            Jump();
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
-        //for crouching
-        if(Input.GetKeyDown(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        }
-        //stopping crouching
-        if (Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-
-        }
     }
     private void StateHandler()
     {
-        //mode crouching
-        if(Input.GetKey(crouchKey))
+        // crouch has highest priority
+        if (isCrouching)
         {
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
         }
-        //mode sprinting
-        if(grounded && Input.GetKey(sprintKey))
+        else if (grounded && isSprinting)
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
         }
-        //mode walking
-        else if(grounded)
+        else if (grounded)
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
         }
-        //if dont have either
         else
         {
             state = MovementState.air;
@@ -181,5 +172,111 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 GetSlopeMoveDirection()
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
+    private void OnEnable()
+    {
+        if (move != null && move.action != null)
+            move.action.Enable();
+
+        if (fire != null && fire.action != null)
+        {
+            fire.action.Enable();
+            fire.action.started += Fire;
+        }
+
+        if (jump != null && jump.action != null)
+        {
+            jump.action.Enable();
+            jump.action.started += OnJumpStarted;
+        }
+
+        if (sprint != null && sprint.action != null)
+        {
+            sprint.action.Enable();
+            sprint.action.started += OnSprintStarted;
+            sprint.action.canceled += OnSprintCanceled;
+        }
+
+        if (crouch != null && crouch.action != null)
+        {
+            crouch.action.Enable();
+            crouch.action.started += OnCrouchStarted;
+            crouch.action.canceled += OnCrouchCanceled;
+        }
+    }
+    private void OnDisable()
+    {
+        if (fire != null && fire.action != null)
+            fire.action.started -= Fire;
+
+        if (jump != null && jump.action != null)
+            jump.action.started -= OnJumpStarted;
+
+        if (sprint != null && sprint.action != null)
+        {
+            sprint.action.started -= OnSprintStarted;
+            sprint.action.canceled -= OnSprintCanceled;
+        }
+
+        if (crouch != null && crouch.action != null)
+        {
+            crouch.action.started -= OnCrouchStarted;
+            crouch.action.canceled -= OnCrouchCanceled;
+        }
+
+        if (move != null && move.action != null)
+            move.action.Disable();
+
+        if (fire != null && fire.action != null)
+            fire.action.Disable();
+
+        if (jump != null && jump.action != null)
+            jump.action.Disable();
+
+        if (sprint != null && sprint.action != null)
+            sprint.action.Disable();
+
+        if (crouch != null && crouch.action != null)
+            crouch.action.Disable();
+    }
+
+    private void Fire(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Fired");
+    }
+
+    private void OnJumpStarted(InputAction.CallbackContext ctx)
+    {
+        if (readyToJump && grounded)
+        {
+            readyToJump = false;
+            Jump();
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+    }
+
+    private void OnSprintStarted(InputAction.CallbackContext ctx)
+    {
+        isSprinting = true;
+    }
+
+    private void OnSprintCanceled(InputAction.CallbackContext ctx)
+    {
+        isSprinting = false;
+    }
+
+    private void OnCrouchStarted(InputAction.CallbackContext ctx)
+    {
+        // perform crouch start behavior
+        isCrouching = true;
+        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+    }
+
+    private void OnCrouchCanceled(InputAction.CallbackContext ctx)
+    {
+        // stop crouch
+        isCrouching = false;
+        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
     }
 }
