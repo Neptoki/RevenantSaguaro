@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    //input actions
     public InputActionReference move;
     public InputActionReference fire;
     public InputActionReference jump;
@@ -22,8 +23,9 @@ public class PlayerMovement : MonoBehaviour
     public float airMultiplier;
     bool readyToJump;
     //crouch code
-    public float crouchSpeed;
-    public float crouchYScale;
+    public float crouchSpeed = 3f;
+    public float crouchSpeedMultiplier = 0.5f;
+    public float crouchYScale = 0.5f;
     private float startYScale;
     //ground check code
     public float playerHeight;
@@ -48,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
         air
     }
 
-    // input state
+    //input state
     private bool isSprinting;
     private bool isCrouching;
 
@@ -66,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         else
             _moveDirection = Vector2.zero;
 
-        //checks if player is grounded, then handles it accordingly
+        //checks if player is grounded, then handles it
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         MyInput();
         SpeedControl();
@@ -82,23 +84,22 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        //fallback incase
+        if (move != null && move.action != null)
+        {
+            horizontalInput = _moveDirection.x;
+            verticalInput = _moveDirection.y;
+        }
+        else
+        {
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
+        }
     }
     private void StateHandler()
     {
-        // crouch has highest priority
-        if (isCrouching)
-        {
-            state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
-        }
-        else if (grounded && isSprinting)
-        {
-            state = MovementState.sprinting;
-            moveSpeed = sprintSpeed;
-        }
-        else if (grounded)
+        //base movement state here
+        if (grounded)
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
@@ -106,6 +107,19 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             state = MovementState.air;
+            moveSpeed = walkSpeed;
+        }
+
+        if (isCrouching)
+        {
+            //slow speed while crouching
+            state = MovementState.crouching;
+            moveSpeed *= crouchSpeedMultiplier;
+        }
+        else if (grounded && isSprinting)
+        {
+            state = MovementState.sprinting;
+            moveSpeed = sprintSpeed;
         }
     }
     //movement direction
@@ -175,6 +189,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnEnable()
     {
+        //input action enabling
         if (move != null && move.action != null)
             move.action.Enable();
 
@@ -206,6 +221,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnDisable()
     {
+        //input action disabling
         if (fire != null && fire.action != null)
             fire.action.started -= Fire;
 
@@ -267,7 +283,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCrouchStarted(InputAction.CallbackContext ctx)
     {
-        // perform crouch start behavior
+        //perform crouch
         isCrouching = true;
         transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
@@ -275,7 +291,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCrouchCanceled(InputAction.CallbackContext ctx)
     {
-        // stop crouch
         isCrouching = false;
         transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
     }

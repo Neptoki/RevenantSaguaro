@@ -963,9 +963,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb41899368e3ec149b60a558391ad629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 400
-  sensY: 400
+  sensX: 2.5
+  sensY: 2.5
   orientation: {fileID: 1814968224}
+  look: {fileID: -7110671679934209712, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
 --- !u!114 &1435859184
 MonoBehaviour:
   m_ObjectHideFlags: 0
