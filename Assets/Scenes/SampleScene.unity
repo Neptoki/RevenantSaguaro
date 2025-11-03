@@ -1364,6 +1364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {fileID: -6533076913926423164, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
   fire: {fileID: 5908448671260944541, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
+  jump: {fileID: -8022604019652568217, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
+  sprint: {fileID: -132167640867058179, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
+  crouch: {fileID: 3776688369834996212, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
   walkSpeed: 5
   sprintSpeed: 10
   groundDrag: 5
@@ -1372,9 +1375,6 @@ MonoBehaviour:
   airMultiplier: 0.4
   crouchSpeed: 0.5
   crouchYScale: 0.5
-  jumpKey: 32
-  sprintKey: 304
-  crouchKey: 306
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
