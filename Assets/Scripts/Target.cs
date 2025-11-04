@@ -10,6 +10,7 @@ public class Target : MonoBehaviour
         if (health <= 0f)
         {
             Die();
+            ScoreManager.instance.AddPoint();
         }
     }
     public void Die()
