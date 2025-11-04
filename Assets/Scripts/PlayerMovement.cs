@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
 {
     //input actions
     public InputActionReference move;
-    public InputActionReference fire;
     public InputActionReference jump;
     public InputActionReference sprint;
     public InputActionReference crouch;
@@ -193,12 +192,6 @@ public class PlayerMovement : MonoBehaviour
         if (move != null && move.action != null)
             move.action.Enable();
 
-        if (fire != null && fire.action != null)
-        {
-            fire.action.Enable();
-            fire.action.started += Fire;
-        }
-
         if (jump != null && jump.action != null)
         {
             jump.action.Enable();
@@ -222,9 +215,6 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         //input action disabling
-        if (fire != null && fire.action != null)
-            fire.action.started -= Fire;
-
         if (jump != null && jump.action != null)
             jump.action.started -= OnJumpStarted;
 
@@ -243,9 +233,6 @@ public class PlayerMovement : MonoBehaviour
         if (move != null && move.action != null)
             move.action.Disable();
 
-        if (fire != null && fire.action != null)
-            fire.action.Disable();
-
         if (jump != null && jump.action != null)
             jump.action.Disable();
 
@@ -254,11 +241,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (crouch != null && crouch.action != null)
             crouch.action.Disable();
-    }
-
-    private void Fire(InputAction.CallbackContext obj)
-    {
-        Debug.Log("Fired");
     }
 
     private void OnJumpStarted(InputAction.CallbackContext ctx)

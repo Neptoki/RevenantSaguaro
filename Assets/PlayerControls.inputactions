@@ -25,7 +25,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Fire",
+                    "name": "Shoot",
                     "type": "Button",
                     "id": "aee318a7-9471-4982-a9a3-681e259f044b",
                     "expectedControlType": "",
@@ -73,12 +73,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "6e809952-a361-4901-99e5-c814b9febc03",
-                    "path": "<Keyboard>/f",
+                    "id": "675b1204-6364-43e3-9a6a-e8f13bdac311",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "Fire",
+                    "groups": ";Keyboard&Mouse;Keyboard",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -89,7 +89,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Controller",
-                    "action": "Fire",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

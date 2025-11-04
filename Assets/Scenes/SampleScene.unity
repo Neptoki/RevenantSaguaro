@@ -897,6 +897,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc8b9c563192fe8479046ce50e08d260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shoot: {fileID: 5908448671260944541, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
+  damage: 10
+  range: 100
+  fpsCam: {fileID: 1435859186}
   MoveAmount: 4
   MoveSpeed: 8
   GUN: {fileID: 1232067421}
@@ -1495,7 +1499,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   move: {fileID: -6533076913926423164, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
-  fire: {fileID: 5908448671260944541, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
   jump: {fileID: -8022604019652568217, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
   sprint: {fileID: -132167640867058179, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
   crouch: {fileID: 3776688369834996212, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
