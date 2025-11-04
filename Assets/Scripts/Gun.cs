@@ -6,6 +6,7 @@ public class Gun : MonoBehaviour
     public InputActionReference shoot;
     public float damage = 10f;
     public float range = 100f;
+    public float impactForce = 30f;
     public Camera fpsCam;
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
@@ -64,7 +65,14 @@ public class Gun : MonoBehaviour
             {
                 target.TakeDamage(damage);
             }
-            Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            //force impact tp rigidbodies
+            if (hit.rigidbody != null)
+            {
+                hit.rigidbody.AddForce(-hit.normal * impactForce);
+            }
+            //partile effect on impact
+            GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            Destroy(impactGO, 2f);
         }
         Debug.Log("Shot");
     }

@@ -160,6 +160,33 @@ CapsuleCollider:
   m_Height: 1.9598378
   m_Direction: 1
   m_Center: {x: 0.003450051, y: 0.98304707, z: -0.00046946108}
+--- !u!54 &54127061
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54127055}
+  serializedVersion: 4
+  m_Mass: 60
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &263387838
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,6 +650,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e6af8c49c00d4e941a9009809e424b85, type: 3}
       insertIndex: -1
       addedObject: {fileID: 54127056}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e6af8c49c00d4e941a9009809e424b85, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 54127061}
   m_SourcePrefab: {fileID: 100100000, guid: e6af8c49c00d4e941a9009809e424b85, type: 3}
 --- !u!1 &488806895
 GameObject:
@@ -6216,9 +6246,10 @@ MonoBehaviour:
   shoot: {fileID: 5908448671260944541, guid: d90b685d1e1740f48806067d90ddbdca, type: 3}
   damage: 10
   range: 100
+  impactForce: 90
   fpsCam: {fileID: 1435859186}
   muzzleFlash: {fileID: 1023298200}
-  impactEffect: {fileID: 0}
+  impactEffect: {fileID: 6124086191053819471, guid: 19f8aa43276507147bf2606ba49f6f85, type: 3}
   MoveAmount: 4
   MoveSpeed: 8
   GUN: {fileID: 1232067421}
