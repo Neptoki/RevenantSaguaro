@@ -29,11 +29,16 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        //added legacy stuff just in case
+        bool legacyPressed = Input.GetButton("Fire1");
+        bool newSystemPressed = IsNewInputPressed();
+
+        if ((legacyPressed || newSystemPressed) && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 1f / fireRate;
-            Shoot(new InputAction.CallbackContext());
+            DoShoot();
         }
+
         //gun sway
         MoveOnX = Input.GetAxis("Mouse X") * Time.deltaTime * MoveAmount;
         MoveOnY = Input.GetAxis("Mouse Y") * Time.deltaTime * MoveAmount;
@@ -57,8 +62,11 @@ public class Gun : MonoBehaviour
         if (shoot != null && shoot.action != null)
             shoot.action.Disable();
     }
-
     private void Shoot(InputAction.CallbackContext obj)
+    {
+        DoShoot();
+    }
+    private void DoShoot()
     {
         //particle effect
         muzzleFlash.Play();
@@ -72,15 +80,33 @@ public class Gun : MonoBehaviour
             {
                 target.TakeDamage(damage);
             }
-            //force impact tp rigidbodies
+            //force impact to rigidbodies
             if (hit.rigidbody != null)
             {
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
-            //partile effect on impact
+            //particle effect on impact
             GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impactGO, 2f);
         }
         Debug.Log("Shot");
+    }
+
+    //input system fix
+    private bool IsNewInputPressed()
+    {
+        if (shoot == null || shoot.action == null)
+            return false;
+        if (!shoot.action.enabled)
+            return false;
+        try
+        {
+            return shoot.action.ReadValue<float>() > 0f;
+        }
+        catch
+        {
+            //fallback catch
+            return shoot.action.phase == InputActionPhase.Started || shoot.action.phase == InputActionPhase.Performed;
+        }
     }
 }
