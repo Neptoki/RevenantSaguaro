@@ -5,35 +5,27 @@ public class HealthBar : MonoBehaviour
 {
     public Slider healthSlider;
     public Slider easeHealthSlider;
-    public float maxHealth = 100f;
-    public float health;
     private float lerpSpeed = 0.05f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        health = maxHealth;
-    }
 
-    // Update is called once per frame
     void Update()
     {
-        if (healthSlider.value != health)
+        //animation
+        if (easeHealthSlider.value != healthSlider.value)
         {
-            healthSlider.value = health;
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            takeDamage(10);
-        }
-        //animation slowly
-        if (healthSlider.value != easeHealthSlider.value)
-        {
-            easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, health, lerpSpeed);
+            easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, healthSlider.value, lerpSpeed);
         }
     }
 
-    void takeDamage(float damage)
+    public void SetSliderMax(float maxHealth)
     {
-        health -= damage;
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = maxHealth;
+        easeHealthSlider.maxValue = maxHealth;
+        easeHealthSlider.value = maxHealth;
+    }
+
+    public void SetSlider(float health)
+    {
+        healthSlider.value = health;
     }
 }
