@@ -43,8 +43,12 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.isPaused)
+            return;
+
         Vector2 lookDelta = Vector2.zero;
         bool isMouseInput = false;
+
         //mouse input first
         if (Mouse.current != null)
         {
@@ -55,6 +59,7 @@ public class PlayerCamera : MonoBehaviour
                 isMouseInput = true;
             }
         }
+
         //then gamepad
         if (!isMouseInput)
         {
@@ -66,6 +71,7 @@ public class PlayerCamera : MonoBehaviour
 
         //sens
         float mouseX, mouseY;
+
         if (isMouseInput)
         {
             mouseX = lookDelta.x * sensX * 0.025f;
@@ -77,10 +83,13 @@ public class PlayerCamera : MonoBehaviour
             mouseX = lookDelta.x * Time.deltaTime * sensX * 100f;
             mouseY = lookDelta.y * Time.deltaTime * sensY * 100f;
         }
+
         xRotation -= mouseY;
         yRotation += mouseX;
+
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-        //then cam rotation and oreintation
+
+        // Camera rotation + orientation
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
     }

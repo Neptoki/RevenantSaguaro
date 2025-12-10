@@ -50,8 +50,11 @@ public class Gun : MonoBehaviour
     {
         if (shoot != null && shoot.action != null)
         {
-            shoot.action.Enable();
-            shoot.action.started += Shoot;
+            if(!PauseMenu.isPaused)
+            {
+                shoot.action.Enable();
+                shoot.action.started += Shoot;
+            }
         }
     }
     private void OnDisable()
