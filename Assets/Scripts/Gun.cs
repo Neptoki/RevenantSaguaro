@@ -29,6 +29,8 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.isPaused)
+            return;
         //added legacy stuff just in case
         bool legacyPressed = Input.GetButton("Fire1");
         bool newSystemPressed = IsNewInputPressed();
@@ -48,14 +50,8 @@ public class Gun : MonoBehaviour
 
     private void OnEnable()
     {
-        if (shoot != null && shoot.action != null)
-        {
-            if(!PauseMenu.isPaused)
-            {
                 shoot.action.Enable();
                 shoot.action.started += Shoot;
-            }
-        }
     }
     private void OnDisable()
     {
