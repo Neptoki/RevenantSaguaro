@@ -15981,7 +15981,7 @@ MonoBehaviour:
   fireRate: 15
   fpsCam: {fileID: 1435859186}
   muzzleFlash: {fileID: 1023298200}
-  impactEffect: {fileID: 6124086191053819471, guid: 19f8aa43276507147bf2606ba49f6f85, type: 3}
+  impactEffect: {fileID: 2790453049482571525, guid: c4af6be39e87b634d9e26d8ce65b529b, type: 3}
   MoveAmount: 2
   MoveSpeed: 4
   GUN: {fileID: 1232067421}
@@ -16005,7 +16005,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: cc1e659425604cd4c92a6fa927543af5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.692
   m_Pitch: 1
   Loop: 0
   Mute: 0
