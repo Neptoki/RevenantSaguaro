@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DoorInteraction : MonoBehaviour
 {
@@ -19,5 +20,6 @@ public class DoorInteraction : MonoBehaviour
     void OpenDoor()
     {
         Debug.Log("Door opened!");
+        SceneManager.LoadScene("MainLevel");
     }
 }
