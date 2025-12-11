@@ -74,6 +74,7 @@ public class EldritchBlast : MonoBehaviour
         Debug.Log("Eldritch Blast cast!");
     }
 
+
     private bool IsPressed()
     {
         if (ability == null || ability.action == null)
