@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +15,7 @@ public class PlayerPickup : MonoBehaviour
     public InputActionReference Pickup;
 
     private Rigidbody heldObject;
+    public bool hasKey = false;
 
     private void OnEnable()
     {

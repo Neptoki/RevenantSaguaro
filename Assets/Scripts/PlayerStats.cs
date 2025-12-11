@@ -7,6 +7,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth;
     public HealthBar healthBar;
+    public bool hasKey = false;
 
     private void Start()
     {

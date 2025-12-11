@@ -7,6 +7,18 @@ public class Key : MonoBehaviour
     [SerializeField] private float floatFrequency = 2f;
     private Vector3 startPos;
 
+    private void OnTriggerEnter(Collider other)
+    {
+        PlayerPickup pickup = other.GetComponent<PlayerPickup>();
+
+        if (pickup != null)
+        {
+            pickup.hasKey = true;
+            Debug.Log("Key picked up!");
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         startPos = transform.position;
