@@ -79,6 +79,11 @@ public class Gun : MonoBehaviour
             {
                 target.TakeDamage(damage);
             }
+            Break breakable = hit.transform.GetComponent<Break>();
+            if (breakable != null)
+            {
+                breakable.BreakObject();
+            }
             //force impact to rigidbodies
             if (hit.rigidbody != null)
             {
