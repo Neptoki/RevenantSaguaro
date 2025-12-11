@@ -46,6 +46,9 @@ public class PlayerCamera : MonoBehaviour
         if (PauseMenu.isPaused)
             return;
 
+        if (PlayerStats.isDead) 
+        return;
+
         Vector2 lookDelta = Vector2.zero;
         bool isMouseInput = false;
 

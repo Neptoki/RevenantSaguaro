@@ -7,12 +7,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth;
     public HealthBar healthBar;
-    public bool hasKey = false;
+    public static bool isDead = false;
 
     private void Start()
     {
         currentHealth = maxHealth;
-
         healthBar.SetSliderMax(maxHealth);
     }
 
@@ -34,11 +33,13 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("You died!");
+        isDead = true;
 
-        //Play death animation
-
-        //Activate death screen
-
+        DeathScreenManager deathScreen = FindObjectOfType<DeathScreenManager>();
+        if (deathScreen != null)
+        {
+            deathScreen.ShowDeathScreen();
+        }
         //... still need to work on this
     }
 }
