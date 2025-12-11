@@ -19,10 +19,14 @@ public class DesertDragonAI : MonoBehaviour
 
     private float lastAttackTime;
 
+    private enum AIState { Idle, Chasing, Attacking }
+    private AIState currentState = AIState.Idle;
+
     void Start()
     {
         currentHealth = maxHealth;
         agent.speed = moveSpeed;
+        agent.stoppingDistance = attackRange;
     }
 
     void Update()
@@ -37,8 +41,11 @@ public class DesertDragonAI : MonoBehaviour
 
         if (distance <= attackRange)
         {
+            // Attack state
+            ChangeState(AIState.Attacking);
             agent.isStopped = true;
             FacePlayer();
+
             if (Time.time - lastAttackTime >= attackCooldown)
             {
                 Attack();
@@ -47,15 +54,43 @@ public class DesertDragonAI : MonoBehaviour
         }
         else if (distance <= chaseRange)
         {
+            // Chase state
+            ChangeState(AIState.Chasing);
             agent.isStopped = false;
             agent.SetDestination(player.position);
-            animator.SetBool("Walk", true);
         }
         else
         {
+            // Idle state
+            ChangeState(AIState.Idle);
             agent.isStopped = true;
-            animator.SetBool("Walk", false);
-            animator.SetTrigger("Idle2");
+        }
+
+        // Optional: Smooth walking animation based on velocity
+        animator.SetFloat("Speed", agent.velocity.magnitude);
+    }
+
+    void ChangeState(AIState newState)
+    {
+        if (currentState == newState) return;
+
+        currentState = newState;
+
+        switch (currentState)
+        {
+            case AIState.Idle:
+                animator.SetTrigger("Idle2");
+                animator.SetBool("Walk", false);
+                break;
+
+            case AIState.Chasing:
+                animator.SetBool("Walk", true);
+                break;
+
+            case AIState.Attacking:
+                // Random attack will be handled in Attack() function
+                animator.SetBool("Walk", false);
+                break;
         }
     }
 
@@ -69,6 +104,7 @@ public class DesertDragonAI : MonoBehaviour
 
     void Attack()
     {
+        // Pick a random attack
         int attackIndex = Random.Range(0, 3);
         switch (attackIndex)
         {
@@ -83,6 +119,7 @@ public class DesertDragonAI : MonoBehaviour
                 break;
         }
 
+        // Damage the player if still in range
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance <= attackRange)
         {
