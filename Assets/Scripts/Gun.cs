@@ -20,6 +20,9 @@ public class Gun : MonoBehaviour
     public float MoveOnY;
     public Vector3 DefaultPos;
     public Vector3 NewGunPos;
+    public AudioSource gunAudio;
+    public float minPitch = 0.95f;
+    public float maxPitch = 1.05f;
 
     void Start()
     {
@@ -69,6 +72,11 @@ public class Gun : MonoBehaviour
     {
         //particle effect
         muzzleFlash.Play();
+        if (gunAudio != null)
+            {
+                gunAudio.pitch = Random.Range(minPitch, maxPitch);
+                gunAudio.PlayOneShot(gunAudio.clip);
+            }
         //actual shot
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
